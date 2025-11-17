@@ -2,7 +2,9 @@
 
 from argparse import ArgumentParser
 
-def average_of_squares(list_of_numbers, list_of_weights=None):
+import numpy as np
+
+def average_of_squares(numbers_fromfile, weights_fromfile=None):
     """ Return the weighted average of a list of values.
     
     By default, all values are equally weighted, but this can be changed
@@ -19,6 +21,8 @@ def average_of_squares(list_of_numbers, list_of_weights=None):
     AssertionError: weights and numbers must have same length
 
     """
+    list_of_numbers = np.loadtxt(numbers_fromfile, dtype=float, delimiter=',')
+    list_of_weights = np.loadtxt(weights_fromfile, dtype=float, delimiter=',')
     if list_of_weights is not None:
         assert len(list_of_weights) == len(list_of_numbers), \
             "weights and numbers must have same length"
@@ -52,11 +56,13 @@ def convert_numbers(list_of_strings):
 
 def process():
     parser = ArgumentParser(description="Calculate weighted squares of the given numbers")
-    parser.add_argument("numbers", type=float, nargs='+', help="Numbers to square and sum.")
-    parser.add_argument('--weights', '-w', type=float, nargs='+', help="Weights for the numbers.")
+    # parser.add_argument("numbers", type=float, nargs='+', help="Numbers to square and sum.")
+    # parser.add_argument('--weights', '-w', type=float, nargs='+', help="Weights for the numbers.")
+    parser.add_argument("numbers_fromfile", nargs='?', default="numbers.txt", help="Numbers to square and sum.")
+    parser.add_argument('--weights_fromfile', '-w', nargs='?', default="weights.txt", help="Weights for the numbers.")
     args = parser.parse_args()
 
-    print(average_of_squares(args.numbers, args.weights))
+    print(average_of_squares(args.numbers_fromfile, args.weights_fromfile))
 
 if __name__ == "__main__":
     process()
